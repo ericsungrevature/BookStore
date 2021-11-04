@@ -1,4 +1,9 @@
-package com.sung.store;
+package com.sung.factory;
+
+import com.sung.book.BookDao;
+import com.sung.book.BookDaoImpl;
+import com.sung.user.UserDao;
+import com.sung.user.UserDaoImpl;
 
 public class DaoFactory {
 

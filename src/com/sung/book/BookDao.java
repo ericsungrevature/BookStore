@@ -1,4 +1,4 @@
-package com.sung.store;
+package com.sung.book;
 
 import java.sql.SQLException;
 import java.util.List;

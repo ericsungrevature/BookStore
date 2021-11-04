@@ -1,4 +1,4 @@
-package com.sung.store;
+package com.sung.factory;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -13,7 +13,7 @@ public class ConnectionFactory {
 
 	public static Connection getConnection() {
 		if (connection == null) {
-			ResourceBundle bundle = ResourceBundle.getBundle("com/sung/store/dbConfig");
+			ResourceBundle bundle = ResourceBundle.getBundle("com/sung/factory/dbConfig");
 			String url = bundle.getString("url");
 			String username = bundle.getString("username");
 			String password = bundle.getString("password");

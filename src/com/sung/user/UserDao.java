@@ -1,4 +1,4 @@
-package com.sung.store;
+package com.sung.user;
 
 import java.sql.SQLException;
 

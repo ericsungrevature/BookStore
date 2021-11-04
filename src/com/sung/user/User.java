@@ -1,7 +1,9 @@
-package com.sung.store;
+package com.sung.user;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.sung.book.Book;
 
 public class User {
 

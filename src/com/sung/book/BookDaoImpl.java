@@ -1,4 +1,4 @@
-package com.sung.store;
+package com.sung.book;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.sung.factory.ConnectionFactory;
 
 public class BookDaoImpl implements BookDao {
 

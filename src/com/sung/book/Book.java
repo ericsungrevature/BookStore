@@ -1,4 +1,4 @@
-package com.sung.store;
+package com.sung.book;
 
 public class Book {
 

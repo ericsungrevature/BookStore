@@ -1,34 +1,58 @@
-/**************************************************************************************
- * Name of Challenge: Book Store
- * Type: Console App
- * Technologies: Java, MySQL, JDBC
- * 
- * User Stores
- * 1. User need to register and login first
- * 2. Show Categories like (Technology, Literature, Fiction etc)
- * 3. User can select category to get the list of books belong to that category
- * 4. Display list of book (like title, author, ISBN number)
- * 5. User can choose a book to get more information (like title, author, price, category, description)
- * 6. There should to option (1-buy, 2-cancel)
- * 7. when select buy add book into cart and cancel go back to previous menu
- * 8. View cart and place the order
- **************************************************************************************/
-//create table user (first_name varchar(20), last_name varchar(20), username varchar(20) unique, password varchar(20));
-//create table book (title varchar(50), author varchar(50), price double, category enum('000', '100', '200', '300', '400', '500', '600', '700', '800', '900'), isbn integer unique, description varchar(1000), count integer);
-
 package com.sung.store;
 
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Scanner;
 
-public class Main {
+import com.sung.book.Book;
+import com.sung.book.BookDao;
+import com.sung.factory.DaoFactory;
+import com.sung.user.User;
+import com.sung.user.UserDao;
 
-	static Scanner sc = new Scanner(System.in);
-	static UserDao udao = DaoFactory.getUserDao();
-	static BookDao bdao = DaoFactory.getBookDao();
+public class Store {
 
-	public static User register(Scanner scan) {
+	private Scanner scan = new Scanner(System.in);
+	private UserDao udao = DaoFactory.getUserDao();
+	private BookDao bdao = DaoFactory.getBookDao();
+
+	public void start() {
+		String input;
+		User user;
+		while(true) {
+			System.out.println("You may:\n"
+					+ "1) Register\n"
+					+ "2) Login\n"
+					+ "3) Quit");
+			System.out.print("What would you like to do? ");
+			input = scan.nextLine();
+			switch(input.toLowerCase()) {
+			default:
+				System.out.println("Invalid Input");
+				break;
+			case "1":
+				System.out.println("Register");
+				user = register(scan);
+				if (user == null)
+					break;
+				userMenu(user, scan);
+				break;
+			case "2":
+				System.out.println("Login");
+				user = login(scan);
+				if (user == null)
+					break;
+				userMenu(user, scan);
+				break;
+			case "3":
+				System.out.println("Goodbye");
+				scan.close();
+				return;
+			}
+		}
+	}
+
+	public User register(Scanner scan) {
 		try {
 			User user = new User();
 			String input;
@@ -52,7 +76,7 @@ public class Main {
 		}
 	}
 
-	public static User login(Scanner scan) {
+	public User login(Scanner scan) {
 		try {
 			String input;
 			System.out.print("Enter your username: ");
@@ -74,7 +98,7 @@ public class Main {
 		}
 	}
 
-	public static void userMenu(User user, Scanner scan) {
+	public void userMenu(User user, Scanner scan) {
 		String input;
 		while(true) {
 			System.out.println("You may: \n"
@@ -102,7 +126,7 @@ public class Main {
 		}
 	}
 
-	public static void bookMenu(User user, Scanner scan) {
+	public void bookMenu(User user, Scanner scan) {
 		String input;
 		while(true) {
 			System.out.println("Book Categories: \n"
@@ -116,7 +140,7 @@ public class Main {
 					+ "7) Arts and recreation\n"
 					+ "8) Literature\n"
 					+ "9) History and geography\n"
-					+ "Exit");
+					+ "10) Exit");
 			System.out.print("Which category would you like to view? ");
 			input = scan.nextLine();
 			List<Book> list;
@@ -214,14 +238,14 @@ public class Main {
 					System.out.println("SQLDatabase Error");
 				}
 				break;
-			case "exit":
+			case "10":
 				System.out.println("Exit");
 				return;
 			}
 		}
 	}
 
-	public static void cartMenu(User user, Scanner scan) {
+	public void cartMenu(User user, Scanner scan) {
 		String input;
 		while(true) {
 			if (user.cart.isEmpty()) {
@@ -239,7 +263,7 @@ public class Main {
 				+ "2) Cancel Your Order\n"
 				+ "3) Continue Shopping");
 			System.out.print("What would you like to do? ");
-			input = sc.nextLine();
+			input = scan.nextLine();
 			switch(input) {
 			default:
 				System.out.println("Invalid Input");
@@ -269,7 +293,7 @@ public class Main {
 		}
 	}
 
-	public static void categoryMenu(User user, List<Book> list, Scanner scan) {
+	public void categoryMenu(User user, List<Book> list, Scanner scan) {
 		String input;
 		while(true) {
 			if (list.isEmpty()) {
@@ -285,7 +309,7 @@ public class Main {
 					list.get(i).getISBN());
 			}
 			System.out.print("Select a book for a description or type 'exit' to leave menu: ");
-			input = sc.nextLine();
+			input = scan.nextLine();
 			try {
 				if (input.equalsIgnoreCase("exit")) {
 					System.out.println("Exit");
@@ -303,7 +327,7 @@ public class Main {
 		}
 	}
 
-	public static int descriptionMenu(User user, Book book, Scanner scan) {
+	public int descriptionMenu(User user, Book book, Scanner scan) {
 		String input;
 		while(true) {
 			System.out.printf("Title: %s\n"
@@ -318,7 +342,7 @@ public class Main {
 					+ "1) Buy\n"
 					+ "2) Cancel");
 			System.out.print("What would you like to do? ");
-			input = sc.nextLine();
+			input = scan.nextLine();
 			switch(input) {
 			default:
 				System.out.println("Invalid Input");
@@ -335,42 +359,6 @@ public class Main {
 			case "2":
 				System.out.println("Cancel");
 				return 0;
-			}
-		}
-	}
-
-	public static void main(String[] args) {
-		String input;
-		User user;
-		while(true) {
-			System.out.println("You may:\n"
-					+ "1) Register\n"
-					+ "2) Login\n"
-					+ "3) Quit");
-			System.out.print("What would you like to do? ");
-			input = sc.nextLine();
-			switch(input.toLowerCase()) {
-			default:
-				System.out.println("Invalid Input");
-				break;
-			case "1":
-				System.out.println("Register");
-				user = register(sc);
-				if (user == null)
-					break;
-				userMenu(user, sc);
-				break;
-			case "2":
-				System.out.println("Login");
-				user = login(sc);
-				if (user == null)
-					break;
-				userMenu(user, sc);
-				break;
-			case "3":
-				System.out.println("Goodbye");
-				sc.close();
-				return;
 			}
 		}
 	}
